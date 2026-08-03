@@ -1,6 +1,6 @@
 process.loadEnvFile('.env');
 
-const { Pool } = require('pg');
+import { Pool } from 'pg';
 
 const configPool = {
     host: process.env.DB_HOST,
@@ -13,6 +13,4 @@ const configPool = {
     connectionTimeoutMillis: process.env.DB_connectionTimeoutMillis
 };
 
-const pool = new Pool(configPool);
-
-module.exports = pool;
+export const pool = new Pool(configPool);

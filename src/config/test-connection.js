@@ -1,4 +1,4 @@
-const pool = require('./config');
+import { pool } from './config.js';
 
 async function testConnection() {
     try {
