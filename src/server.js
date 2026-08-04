@@ -1,13 +1,13 @@
 //ESTE MODULO SE ENCAREGA DE CREAR Y CONFIGURAR EL SERVIDRO
 
 import express from 'express';
-import { router } from './routes/authors.route.js';
+import { authorsRouter } from './routes/authors.route.js';
 
 export const app = express();
 
 
 app.use(express.json());
-app.use(router);
+app.use(authorsRouter);
 
 /* await pool.query('SELECT NOW()')
     .then(() => console.log('PostgreSQL conectado correctamente'))
