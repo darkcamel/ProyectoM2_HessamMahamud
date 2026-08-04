@@ -8,7 +8,7 @@ export async function getAllAuthors() {
     return rows;
 }
 
-export async function getAuthorsById(id) {
+export async function getAuthorById(id) {
     const { rows } = await pool.query(
         'SELECT id, name, email, bio, created_at FROM authors WHERE id = $1',
         [id]
