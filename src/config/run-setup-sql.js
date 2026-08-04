@@ -11,3 +11,5 @@ try {
 } finally {
     await pool.end();
 }
+
+//npm run db:setup
