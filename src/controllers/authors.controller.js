@@ -51,6 +51,11 @@ export async function postAuthor(req, res) {
 export async function putAuthor(req, res) {
     const { name, email, bio } = req.body;
     const { id } = req.params;
+    const author = await getAuthorById(req.params.id);
+
+    if (!author) {
+        return res.status(404).json({ error: 'Author no encontrado' });
+    }    
 
     if (!name || !name.trim()) {
         return res.status(400).json({ error: 'name es requerido' });
@@ -67,7 +72,7 @@ export async function putAuthor(req, res) {
     try {
         const updated = await updateAuthor(id, { name, email, bio });
         if (!updated) {
-            return res.status(400).json({ error: 'Author no encontrado' });
+            return res.status(404).json({ error: 'Author no encontrado' });
 
         }
         res.status(200).json(updated);
