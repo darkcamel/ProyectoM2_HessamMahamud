@@ -8,7 +8,6 @@ export const app = express();
 
 app.use(express.json());
 app.use(authorsRouter);
-
 /* await pool.query('SELECT NOW()')
     .then(() => console.log('PostgreSQL conectado correctamente'))
     .catch((error) => {
