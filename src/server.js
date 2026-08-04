@@ -6,7 +6,7 @@ import { router } from './routes/authors.route.js';
 export const app = express();
 
 
-app.use(express.json);
+app.use(express.json());
 app.use(router);
 
 /* await pool.query('SELECT NOW()')
