@@ -23,8 +23,6 @@ await pool.query('SELECT NOW()')
         process.exit(1);
     });
 
-import { pool } from './config.js';
-
 async function testConnection() {
     try {
         const result = await pool.query('SELECT NOW() AS hora_actual');
