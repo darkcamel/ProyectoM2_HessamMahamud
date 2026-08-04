@@ -3,7 +3,7 @@
 process.loadEnvFile('.env');
 import express from 'express';
 import { Router } from 'express';
-import { pool } from './src/config/config.js';
+import { pool } from './src/config/pool.config.js';
 
 const app = express();
 const router = Router();
