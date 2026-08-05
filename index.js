@@ -1,7 +1,7 @@
 //ESTE MODULO SE ENCARGA SOLO DE LEVANTAR EL SERVIDOR
 import { app } from './src/server.js';
 /* import loadEnvFile from 'node:process';
-process.loadEnvFile('.env'); */
+process.loadEnvFile('.env'); */ // DONDE VA?
 
 app.listen(process.env.PORT, () => {
     console.log(`Server listen on port ${process.env.PORT}`);
@@ -9,4 +9,4 @@ app.listen(process.env.PORT, () => {
 
 /* if (process.env.NODE_ENV !== 'production') {
     loadEnvFile('.env');
-} */
+} */ //DONDE VA?
