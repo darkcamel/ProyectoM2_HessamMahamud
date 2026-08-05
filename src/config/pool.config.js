@@ -1,4 +1,5 @@
 import { Pool } from 'pg';
+import { loadEnvFile } from 'node:process';
 process.loadEnvFile('.env');
 
 const configPool = {
