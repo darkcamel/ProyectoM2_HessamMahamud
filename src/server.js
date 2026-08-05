@@ -2,12 +2,14 @@
 
 import express from 'express';
 import { authorsRouter } from './routes/authors.route.js';
-import swaggerUi from 'swagger-ui-express';
+import loadEnvFile from 'node:process';
+process.loadEnvFile('.env');
+/* import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
-
+ */
 export const app = express();
-const swaggerDocument = YAML.load('/openapi.yaml');
+/* const swaggerDocument = YAML.load('/openapi.yaml'); */
 
 app.use(express.json());
 app.use(authorsRouter);
-app.use('/api-docs', swaggerUi.server, swaggerUi.setup(swaggerDocument));
+/* app.use('/api-docs', swaggerUi.server, swaggerUi.setup(swaggerDocument)); */

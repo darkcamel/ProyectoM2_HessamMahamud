@@ -1,5 +1,5 @@
-process.loadEnvFile('.env');
 import { Pool } from 'pg';
+process.loadEnvFile('.env');
 
 const configPool = {
     host: process.env.DB_HOST,
