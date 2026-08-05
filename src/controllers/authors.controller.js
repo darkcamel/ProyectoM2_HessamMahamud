@@ -60,6 +60,7 @@ export async function putAuthor(req, res) {
     if (!name || !name.trim()) {
         return res.status(400).json({ error: 'name es requerido' });
     }
+
     if (!email || !email.trim()) {
         return res.status(400).json({ error: 'email es requerido' });
     }
