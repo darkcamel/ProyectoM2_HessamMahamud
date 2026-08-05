@@ -12,4 +12,4 @@ try {
     await pool.end();
 }
 
-//npm run db:setup
+//npm run db:setup desde terminal para correr setup.sql y crear tablas.
