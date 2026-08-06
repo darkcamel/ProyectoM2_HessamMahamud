@@ -1,5 +1,5 @@
 //UNICA CAPA QUE HABLA CON POSTGRE
-import { pool } from "../config/pool.config.js";
+import { pool } from '../config/pool.config.js';
 
 export async function getAllAuthors() {
     const { rows } = await pool.query(
