@@ -23,23 +23,23 @@ export async function getPostsByAuthorId(authorId) {
     return rows;
 }
 
-export async function createPost({ title, content, authorId, published }) {
+export async function createPost({ title, content, author_id, published }) {
     const { rows } = await pool.query(
         `INSERT INTO posts (title, content, author_id, published)
         VALUES ($1, $2, $3, $4)
-        RETURNING id, title, content, published, created_at`,
-        [title, content, authorId, published ?? false]
+        RETURNING id, title, content, author_id, published, created_at`,
+        [title, content, author_id, published ?? false]
     );
     return rows[0];
 }
 
-export async function updatePost(id, { title, content, authorId, published }) {
+export async function updatePost(id, { title, content, author_id, published }) {
     const { rows } = await pool.query(
         `UPDATE posts
         SET title = $1, content = $2, author_id = $3, published = $4
         WHERE id = $5
-        RETURNING id, title, content, published`,
-        [title, content, published ?? false, id]
+        RETURNING id, title, content, author_id, published, created_at`,
+        [title, content, author_id, published ?? false, id]
     );
     return rows[0] ?? null;
 }
