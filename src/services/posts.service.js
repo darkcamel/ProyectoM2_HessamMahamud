@@ -49,5 +49,5 @@ export async function deletePost(id) {
         'DELETE FROM posts WHERE id = $1',
         [id]
     );
-    return rowCount > 0;  
+    return rowCount > 0;
 }
