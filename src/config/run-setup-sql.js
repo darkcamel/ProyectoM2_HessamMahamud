@@ -8,7 +8,7 @@ try {
     console.log('Tablas creadas correctamente');
 
 } catch (error) {
-    console.error('Error ejectuando setup.sql', error.messager);
+    console.error('Error ejectuando setup.sql', error.message);
     
 } finally {
     await pool.end();

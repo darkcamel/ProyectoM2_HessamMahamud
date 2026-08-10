@@ -6,11 +6,12 @@ import {
     putAuthor,
     removeAuthor
 } from '../controllers/authors.controller.js'
+import { asyncHandler } from "../middleware/async-handler.js";
 
 export const authorsRouter = Router();
 
-authorsRouter.get('/authors', listAuthors);
-authorsRouter.get('/authors/:id', getAuthor);
-authorsRouter.post('/authors', postAuthor);
-authorsRouter.put('/authors/:id', putAuthor);
-authorsRouter.delete('/authors/:id', removeAuthor);
+authorsRouter.get('/authors', asyncHandler(listAuthors));
+authorsRouter.get('/authors/:id', asyncHandler(getAuthor));
+authorsRouter.post('/authors', asyncHandler(postAuthor));
+authorsRouter.put('/authors/:id', asyncHandler(putAuthor));
+authorsRouter.delete('/authors/:id', asyncHandler(removeAuthor));

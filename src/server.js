@@ -10,6 +10,7 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { AppError } from './utils/AppError.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -22,4 +23,7 @@ app.use(authorsRouter);
 app.use(postsRouter);
 app.use(commentsRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use((req, res, next) => {
+    (new AppError('Ruta no encontrada', 403));
+});
 app.use(errorHandler);
