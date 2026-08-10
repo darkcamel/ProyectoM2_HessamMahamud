@@ -3,7 +3,7 @@
 import { app } from './src/server.js';
 
 if (process.env.NODE_ENV !== 'production') {
-    loadEnvFile('.env');
+    process.loadEnvFile('.env');
 }
 
 app.listen(process.env.PORT, () => {
