@@ -1,6 +1,9 @@
 # Blog API — Proyecto M2
 
-API REST tipo JSONPlaceholder construida con Node.js, Express y PostgreSQL, que gestiona `authors`, `posts` y `comments`. Incluye validaciones, manejo de errores centralizado, pruebas unitarias, documentación OpenAPI y despliegue en Railway.
+API REST tipo JSONPlaceholder construida con Node.js, Express y PostgreSQL, que gestiona `authors`, `posts` y `comments` (extra credit). Incluye validaciones, manejo de errores centralizado, pruebas unitarias, documentación OpenAPI y despliegue en Railway.
+
+- **Repositorio:** https://github.com/darkcamel/ProyectoM2_HessamMahamud
+- **Aplicación en producción (Railway):** https://proyectom2hessammahamud-production.up.railway.app/
 
 ## Tecnologías
 
@@ -34,9 +37,8 @@ src/
 ├── services/        # authors, posts, comments
 ├── middleware/       # asyncHandler, errorHandler
 ├── utils/            # AppError
+├── tests/             # api.test.js — pruebas con vitest + supertest (services mockeados)
 └── server.js         # configuración de Express (middlewares, routers)
-tests/
-└── api.test.js        # pruebas con vitest + supertest (services mockeados)
 docs/
 └── swagger.yaml        # documentación OpenAPI
 index.js                # levanta el servidor (app.listen)
@@ -55,8 +57,8 @@ Relaciones: un author tiene muchos posts; un post tiene muchos comments; un auth
 ### 1. Clonar el repositorio e instalar dependencias
 
 ```bash
-git clone <url-del-repo>
-cd <carpeta-del-proyecto>
+git clone https://github.com/darkcamel/ProyectoM2_HessamMahamud.git
+cd ProyectoM2_HessamMahamud
 npm install
 ```
 
@@ -112,6 +114,8 @@ Con el servidor corriendo, la documentación interactiva está disponible en:
 http://localhost:<PORT>/api-docs
 ```
 
+En producción: https://proyectom2hessammahamud-production.up.railway.app/api-docs
+
 ## Endpoints principales
 
 ### Authors
@@ -161,7 +165,3 @@ Las pruebas usan `vitest` y `supertest`, mockeando la capa de services (`vi.mock
 ## Despliegue
 
 El proyecto está desplegado en [Railway](https://railway.app), con un servicio para la aplicación Node.js y otro para PostgreSQL. Las variables de entorno de conexión a la base se configuran referenciando las variables del servicio de PostgreSQL de Railway.
-
-## Uso de AI
-
-Para mayor información dirigirse a: [Uso de AI](./docs/USO_DE_AI.md).
