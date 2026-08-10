@@ -3,6 +3,8 @@
 import express from 'express';
 import { authorsRouter } from './routes/authors.route.js';
 import { postsRouter } from './routes/posts.route.js';
+import { commentsRouter } from './routes/comments.route.js';
+import { errorHandler } from './middleware/error-handler.js';
 
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
@@ -18,4 +20,6 @@ const swaggerDocument = YAML.load(join(__dirname, '../docs/swagger.yaml'));
 app.use(express.json());
 app.use(authorsRouter);
 app.use(postsRouter);
+app.use(commentsRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(errorHandler);
