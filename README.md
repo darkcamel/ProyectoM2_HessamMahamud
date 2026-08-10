@@ -161,3 +161,7 @@ Las pruebas usan `vitest` y `supertest`, mockeando la capa de services (`vi.mock
 ## Despliegue
 
 El proyecto está desplegado en [Railway](https://railway.app), con un servicio para la aplicación Node.js y otro para PostgreSQL. Las variables de entorno de conexión a la base se configuran referenciando las variables del servicio de PostgreSQL de Railway.
+
+## Uso de AI
+
+Para mayor información dirigirse a: [Uso de AI](./docs/USO_DE_AI.md).

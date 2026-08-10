@@ -36,3 +36,5 @@ Desde el inicio se estableció una metodología de trabajo intencional con la IA
 ## Consideraciones
 
 El uso de IA en este proyecto estuvo orientado a **acelerar el aprendizaje mediante retroalimentación inmediata y detallada**, no a sustituir el proceso de escritura y comprensión del código por parte del desarrollador. Todo el código presente en el repositorio fue escrito, revisado y comprendido por el autor del proyecto, con el apoyo de la IA como herramienta de mentoría técnica.
+
+Para mayor información dirigirse a: [Prompts Y Outputs](PROMPTS_OUTPUTS.md).
