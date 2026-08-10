@@ -9,7 +9,6 @@ import {
 } from '../services/authors.service.js';
 import { AppError } from '../utils/AppError.js';
 
-
 export async function listAuthors(req, res, next) {
     try {
         const authors = await getAllAuthors();

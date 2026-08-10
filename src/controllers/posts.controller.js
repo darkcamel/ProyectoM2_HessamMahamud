@@ -34,6 +34,7 @@ export async function getPost(req, res, next) {
 
 export async function getPostsByAuthor(req, res, next) {
     const { authorId } = req.params;
+    
     try {
         const author = await getAuthorById(authorId);
         if (!author) {
@@ -82,8 +83,6 @@ export async function putPost(req, res, next) {
     const { title, content, author_id, published } = req.body;
     const { id } = req.params;
 
-
-
     if (!title || !title.trim()) {
         return next(new AppError('Title es requerido', 400));
     }
@@ -95,6 +94,7 @@ export async function putPost(req, res, next) {
     if (!author_id) {
         return next(new AppError('Author_id es requerido', 400));
     }
+
     try {
         const post = await getPostById(req.params.id);
         if (!post) {
