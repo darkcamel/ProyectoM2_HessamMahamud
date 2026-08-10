@@ -24,6 +24,6 @@ app.use(postsRouter);
 app.use(commentsRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use((req, res, next) => {
-    (new AppError('Ruta no encontrada', 403));
+    next(new AppError('Ruta no encontrada', 404));
 });
 app.use(errorHandler);

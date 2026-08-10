@@ -19,7 +19,7 @@ export async function listPosts(req, res, next) {
     }
 }
 
-export async function getPost(req, res) {
+export async function getPost(req, res, next) {
     try {
         const post = await getPostById(req.params.id);
         if (!post) {
@@ -32,7 +32,7 @@ export async function getPost(req, res) {
     }
 }
 
-export async function getPostsByAuthor(req, res) {
+export async function getPostsByAuthor(req, res, next) {
     const { authorId } = req.params;
     try {
         const author = await getAuthorById(authorId);
@@ -47,7 +47,7 @@ export async function getPostsByAuthor(req, res) {
     }
 }
 
-export async function postPost(req, res) {
+export async function postPost(req, res, next) {
     const { title, content, author_id, published } = req.body;
 
     if (!title || !title.trim()) {
@@ -78,7 +78,7 @@ export async function postPost(req, res) {
     }
 }
 
-export async function putPost(req, res) {
+export async function putPost(req, res, next) {
     const { title, content, author_id, published } = req.body;
     const { id } = req.params;
 
@@ -120,13 +120,14 @@ export async function putPost(req, res) {
     }
 }
 
-export async function removePost(req, res) {
+export async function removePost(req, res, next) {
     try {
         const deleted = await deletePost(req.params.id);
         if (!deleted) {
-            return res.status(404).json({ error: 'Post no encontrado' });
+            return next(new AppError('Post no encontrado', 404));
         }
         res.status(204).send()
+
     } catch (error) {
         next(error);
     }
