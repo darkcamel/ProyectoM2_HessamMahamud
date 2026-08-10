@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start":"node index.js",
     "test": "vitest",
     "dev": "node --watch index.js",
     "db:setup": "node src/config/run-setup-sql.js"
