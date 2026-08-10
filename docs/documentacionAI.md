@@ -1,103 +1,38 @@
-# Documentación detallada uso AI
+# Uso de Inteligencia Artificial en el proyecto
 
-## 1. setup.sql
+Este documento describe cómo se utilizó inteligencia artificial (Claude, de Anthropic) durante el desarrollo de este proyecto, con el fin de ser transparente sobre el proceso de construcción y el rol que cumplió la herramienta.
 
-### 1.1 Prompt
-setup.sql no esta todavia montado:
+## Herramienta utilizada
 
-```sql
--- Tabla authors
-CREATE TABLE IF NOT EXISTS authors (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(150) UNIQUE NOT NULL,
-    bio TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
+- **Claude** (Anthropic), usado como asistente conversacional a través de la interfaz de chat.
 
--- Tabla posts
-CREATE TABLE IF NOT EXISTS posts (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(200) NOT NULL,
-    content TEXT NOT NULL,
-    author_id INTEGER NOT NULL,
-    published BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    FOREIGN KEY (author_id) REFERENCES authors(id) ON DELETE CASCADE
-);
+## Enfoque general de trabajo
 
--- Tabla comments (extra credit)
-CREATE TABLE IF NOT EXISTS comments (
-    id SERIAL PRIMARY KEY,
-    post_id INTEGER NOT NULL,
-    author_id INTEGER NOT NULL,
-    content TEXT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
-    FOREIGN KEY (author_id) REFERENCES authors(id) ON DELETE CASCADE
-);
-```
+Desde el inicio se estableció una metodología de trabajo intencional con la IA, orientada al aprendizaje y no a la generación automática de código sin comprensión. El enfoque acordado fue:
 
-Este es lo que está adentro del setup.sql. Quiero poder ejecutarlo desde un script con un archivo .js para facilitarme el trabajo. Es posible, cómo?
+1. **Pensar antes de codear**: antes de escribir cualquier línea de código, se trabajó junto con la IA en analizar la consigna, identificar ambigüedades, modelar las entidades y sus relaciones, diseñar el esquema de base de datos, definir la arquitectura de carpetas y establecer los contratos de cada endpoint (input, output, códigos de estado y casos de error).
+2. **Escritura propia del código**: la gran mayoría del código fue escrito por el desarrollador, no generado directamente por la IA. La IA cumplió un rol de guía, revisor y mentor técnico.
+3. **Revisión de código con retroalimentación pedagógica**: cada bloque de código propio fue enviado a la IA para revisión. La IA señalaba errores (de sintaxis, de lógica, de convención de nombres, de arquitectura), explicaba la causa raíz del problema y, en la mayoría de los casos, guiaba al desarrollador hacia la solución en lugar de entregarla directamente, para reforzar el aprendizaje.
+4. **Explicaciones detalladas**: dado que el desarrollador se encontraba en una etapa temprana de aprendizaje en programación, se solicitaron explicaciones detalladas de conceptos de JavaScript (por ejemplo, diferencias entre `||` y `??`, destructuring de objetos, `async/await`, manejo de promesas, middlewares de Express) y de SQL (consultas parametrizadas, `RETURNING`, claves foráneas, `ON DELETE CASCADE`).
 
-Por otro lado te paso la configuración de pool.config.js para que tengas a la mano y una foto de como tengo estructuradas las carpetas:
+## Tareas en las que se usó IA
 
-![directory](./assets/Screenshot_2026-08-05_09-30-25.png)
+- **Análisis de la consigna y planificación previa a la escritura de código.**
+- **Revisión y corrección de código propio** en las capas de servicios (queries SQL parametrizadas), controladores (validaciones, manejo de errores) y rutas (Express Router).
+- **Depuración de errores** durante el desarrollo y las pruebas manuales en Thunder Client (por ejemplo: errores de sintaxis en JSON, errores de referencias de variables, problemas de orden de rutas en Express, errores de conexión a base de datos).
+- **Diseño del middleware de manejo de errores centralizado** (clase `AppError`, `errorHandler`, `asyncHandler`), incluyendo la explicación del mecanismo de middlewares de cuatro parámetros en Express.
+- **Redacción de pruebas unitarias** con Vitest y Supertest, incluyendo la explicación del uso de mocks (`vi.mock`) para aislar la capa de servicios de la base de datos real.
+- **Generación de la documentación OpenAPI** (`swagger.yaml`), a partir de los endpoints, esquemas y validaciones ya implementados en el proyecto.
+- **Asistencia en el proceso de despliegue en Railway**, incluyendo la resolución de errores relacionados con variables de entorno, red interna vs. pública de Railway, y ejecución del script de creación de tablas contra la base de datos de producción.
+- **Generación de esta documentación y del archivo `README.md`** del proyecto.
 
-```js
-import { Pool } from 'pg';
-import { loadEnvFile } from 'node:process';
-process.loadEnvFile('.env');
+## Tareas realizadas sin asistencia de IA (o con mínima asistencia)
 
-const configPool = {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    max: process.env.DB_MAX,
-    idleTimeoutMillis: process.env.DB_IDLE_TIMEOUT_MILLIS,
-    connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MILLIS
-};
+- Toma de decisiones de diseño finales (por ejemplo: elección de la ruta anidada para comments, convención de nombres de mensajes de error, ubicación de las validaciones de existencia de recursos).
+- Escritura manual de la totalidad del código de servicios, controladores y rutas.
+- Pruebas manuales de los endpoints en Thunder Client.
+- Configuración manual del proyecto en Railway a través de la interfaz web.
 
-export const pool = new Pool(configPool);
-```
+## Consideraciones
 
-
-### 1.2 Output
-
-Perfecto, ese `setup.sql` está bien — vamos a armar el script que lo ejecute, adaptado a tu estructura real (`pool.config.js` con export nombrado `pool`, y el `.sql` viviendo en `src/config/`).
-
-#### src/config/run-setup.js
-
-```js
-import { readFileSync } from 'node:fs';
-import { pool } from './pool.config.js';
-
-const sql = readFileSync(new URL('./setup.sql', import.meta.url), 'utf-8');
-
-try {
-  await pool.query(sql);
-  console.log('Tablas creadas correctamente');
-} catch (error) {
-  console.error('Error ejecutando setup.sql:', error.message);
-} finally {
-  await pool.end();
-}
-```
-
-Detalle importante que cambia respecto al ejemplo genérico que te había mostrado antes: este archivo va a vivir **dentro** de `src/config/`, junto a `pool.config.js` y `setup.sql`. Por eso:
-
-- `import { pool } from './pool.config.js'`: ruta relativa **al mismo directorio** (`./`), no `../config/...` como en el service — porque este script está adentro de `config/`, no afuera.
-- `new URL('./setup.sql', import.meta.url)`: mismo criterio, `setup.sql` está al lado de este archivo.
-- Fijate que uso `await` "suelto" (sin envolverlo en una función `async`) directamente en el nivel superior del archivo. Esto se llama **top-level await**, y es una característica de los ES Modules (por eso tu `package.json` necesita `"type": "module"`, que ya debe tener si estás usando `import`/`export` en todos lados). Sin eso, tendrías que envolver todo en una función `async` y llamarla, como en mi primer ejemplo.
-
-#### Cómo correrlo
-
-Con Node, simplemente:
-
-```bash
-node src/config/run-setup.js
-```
-
-Si querés, después le agregás un script en `package.json` (`"db:setup": "node src/config/run-setup.js"`) para no acordarte de la ruta cada vez, pero no es obligatorio ahora.
+El uso de IA en este proyecto estuvo orientado a **acelerar el aprendizaje mediante retroalimentación inmediata y detallada**, no a sustituir el proceso de escritura y comprensión del código por parte del desarrollador. Todo el código presente en el repositorio fue escrito, revisado y comprendido por el autor del proyecto, con el apoyo de la IA como herramienta de mentoría técnica.
