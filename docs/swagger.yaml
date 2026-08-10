@@ -1,0 +1,380 @@
+openapi: 3.0.3
+info:
+  title: Blog API
+  description: API REST tipo JSONPlaceholder para gestionar authors, posts y comments.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001
+    description: Servidor local
+
+tags:
+  - name: Authors
+  - name: Posts
+  - name: Comments
+
+paths:
+  /authors:
+    get:
+      tags: [Authors]
+      summary: Listar todos los authors
+      responses:
+        '200':
+          description: Lista de authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+    post:
+      tags: [Authors]
+      summary: Crear un author
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorInput'
+      responses:
+        '201':
+          description: Author creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          description: name/email faltante o email ya en uso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /authors/{id}:
+    parameters:
+      - $ref: '#/components/parameters/AuthorId'
+    get:
+      tags: [Authors]
+      summary: Obtener un author por id
+      responses:
+        '200':
+          description: Author encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '404':
+          description: Author no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags: [Authors]
+      summary: Actualizar un author
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorInput'
+      responses:
+        '200':
+          description: Author actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          description: Datos inválidos o email ya en uso por otro author
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Author no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags: [Authors]
+      summary: Eliminar un author (borra en cascada sus posts y comments)
+      responses:
+        '204':
+          description: Eliminado correctamente
+        '404':
+          description: Author no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /posts:
+    get:
+      tags: [Posts]
+      summary: Listar todos los posts
+      responses:
+        '200':
+          description: Lista de posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+    post:
+      tags: [Posts]
+      summary: Crear un post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+      responses:
+        '201':
+          description: Post creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: title/content/author_id faltante o author_id inexistente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /posts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/PostId'
+    get:
+      tags: [Posts]
+      summary: Obtener un post por id
+      responses:
+        '200':
+          description: Post encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          description: Post no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags: [Posts]
+      summary: Actualizar un post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+      responses:
+        '200':
+          description: Post actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: Datos inválidos o author_id inexistente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Post no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags: [Posts]
+      summary: Eliminar un post (borra en cascada sus comments)
+      responses:
+        '204':
+          description: Eliminado correctamente
+        '404':
+          description: Post no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /posts/author/{authorId}:
+    get:
+      tags: [Posts]
+      summary: Listar los posts de un author
+      parameters:
+        - $ref: '#/components/parameters/AuthorId'
+          name: authorId
+      responses:
+        '200':
+          description: Lista de posts del author (puede ser vacía)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        '404':
+          description: Author no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /posts/{postId}/comments:
+    get:
+      tags: [Comments]
+      summary: Listar los comments de un post
+      parameters:
+        - $ref: '#/components/parameters/PostId'
+          name: postId
+      responses:
+        '200':
+          description: Lista de comments del post (puede ser vacía)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '404':
+          description: Post no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /comments:
+    post:
+      tags: [Comments]
+      summary: Crear un comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentInput'
+      responses:
+        '201':
+          description: Comment creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: content/post_id/author_id faltante o inexistente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  parameters:
+    AuthorId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Id del author
+    PostId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Id del post
+
+  schemas:
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        bio:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+    AuthorInput:
+      type: object
+      required: [name, email]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        bio:
+          type: string
+
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        author_id:
+          type: integer
+        published:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+    PostInput:
+      type: object
+      required: [title, content, author_id]
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        author_id:
+          type: integer
+        published:
+          type: boolean
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+        post_id:
+          type: integer
+        author_id:
+          type: integer
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    CommentInput:
+      type: object
+      required: [post_id, author_id, content]
+      properties:
+        post_id:
+          type: integer
+        author_id:
+          type: integer
+        content:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
