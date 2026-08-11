@@ -31,17 +31,18 @@ route → controller → service → base de datos
 
 ```
 src/
-├── config/         # pool.config.js, setup.sql, run-setup-sql.js
-├── controllers/     # authors, posts, comments
-├── routes/          # authors, posts, comments
-├── services/        # authors, posts, comments
-├── middleware/       # asyncHandler, errorHandler
-├── utils/            # AppError
-├── tests/             # api.test.js — pruebas con vitest + supertest (services mockeados)
-└── server.js         # configuración de Express (middlewares, routers)
-docs/
-└── swagger.yaml        # documentación OpenAPI
-index.js                # levanta el servidor (app.listen)
+├── config/                # pool.config.js, setup.sql, run-setup-sql.js
+├── controllers/           # authors, posts, comments
+├── routes/                # authors, posts, comments
+├── services/              # authors, posts, comments
+├── middleware/            # asyncHandler, errorHandler
+├── utils/                 # AppError
+├── tests/                 # api.test.js (vitest + supertest, services mockeados)
+├── docs/                  # 📁 documentación ahora dentro de src
+│   └── swagger.yaml       # OpenAPI
+└── server.js              # configuración de Express (middlewares, routers)
+
+index.js                   # levanta el servidor (app.listen) — sigue fuera
 ```
 
 ## Modelo de datos
