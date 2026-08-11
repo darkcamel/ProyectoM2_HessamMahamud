@@ -16,7 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const app = express();
-const swaggerDocument = YAML.load(join(__dirname, '../docs/swagger.yaml'));
+const swaggerDocument = YAML.load(join(__dirname, '../src/docs/swagger.yaml'));
 
 app.use(express.json());
 app.use(authorsRouter);
