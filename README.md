@@ -153,7 +153,7 @@ En producción: https://proyectom2hessammahamud-production.up.railway.app/api-do
 - `posts`: `title`, `content` y `author_id` requeridos; `author_id` debe corresponder a un author existente.
 - `comments`: `content`, `post_id` y `author_id` requeridos; `post_id` y `author_id` deben corresponder a registros existentes.
 
-Todas las respuestas de error siguen el formato `{ "error": "mensaje descriptivo" }`, con el status code correspondiente (`400`, `404`, `500`).
+Todas las respuestas de error en el handler siguen el formato `{ "error": "mensaje descriptivo" }`, con el status code correspondiente (`400`, `404`, `500`).
 
 ## Pruebas
 
