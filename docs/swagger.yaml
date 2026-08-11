@@ -4,6 +4,8 @@ info:
   description: API REST tipo JSONPlaceholder para gestionar authors, posts y comments.
   version: 1.0.0
 servers:
+  - url: https://proyectom2hessammahamud-production.up.railway.app/
+    description: servidor railway
   - url: http://localhost:3001
     description: Servidor local
 
