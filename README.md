@@ -1,6 +1,6 @@
 # Blog API — Proyecto M2
 
-API REST tipo JSONPlaceholder construida con Node.js, Express y PostgreSQL, que gestiona `authors`, `posts` y `comments` (extra credit). Incluye validaciones, manejo de errores centralizado, pruebas unitarias, documentación OpenAPI y despliegue en Railway.
+API REST tipo JSONPlaceholder construida con Node.js, Express y PostgreSQL, que gestiona `authors`, `posts` y `comments`. Incluye validaciones, manejo de errores centralizado, pruebas unitarias, documentación OpenAPI y despliegue en Railway.
 
 - **Repositorio:** https://github.com/darkcamel/ProyectoM2_HessamMahamud
 - **Aplicación en producción (Railway):** https://proyectom2hessammahamud-production.up.railway.app/
