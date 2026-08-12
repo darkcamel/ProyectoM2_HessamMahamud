@@ -9,7 +9,9 @@ try {
 
 } catch (error) {
     console.error('Error ejecutando seed.sql', error.message);
-    
+
 } finally {
     await pool.end();
 }
+
+//npm run db:seed desde terminal para correr seed.sql y crear ejemplos en tablas.

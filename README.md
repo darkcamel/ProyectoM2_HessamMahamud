@@ -1,8 +1,3 @@
-Perfecto. Te entrego el `README.md` completo y actualizado, listo para copiar y pegar en tu proyecto. Incorpora la nueva estructura de carpetas (`src/db/`), los scripts `db:setup` y `db:seed`, y todos los detalles de instalación, uso, pruebas, despliegue y documentación.
-
----
-
-```markdown
 # Blog API — Proyecto M2
 
 API REST tipo JSONPlaceholder construida con Node.js, Express y PostgreSQL, que gestiona `authors`, `posts` y `comments` (extra credit). Incluye validaciones, manejo de errores centralizado, pruebas unitarias, documentación OpenAPI y despliegue en Railway.
@@ -217,10 +212,5 @@ Para más detalles, consultar el archivo [`USO_DE_IA.md`](USO_DE_IA.md) y la lis
 ## Licencia
 
 ISC
-```
 
 ---
-
-Este README está completo, actualizado con la nueva estructura, incluye el paso de seed, los scripts correctos y toda la información necesaria para que cualquier persona (o tu profesor) pueda clonar, configurar, ejecutar y probar tu proyecto sin problemas.  
-
-¿Listo para subirlo a GitHub? Recuerda también actualizar los archivos `run-setup-sql.js` y `run-seed-sql.js` con las rutas correctas a `../db/`. Cualquier otra cosa, aquí estoy.
