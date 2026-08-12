@@ -1,3 +1,8 @@
+Perfecto. Te entrego el `README.md` completo y actualizado, listo para copiar y pegar en tu proyecto. Incorpora la nueva estructura de carpetas (`src/db/`), los scripts `db:setup` y `db:seed`, y todos los detalles de instalación, uso, pruebas, despliegue y documentación.
+
+---
+
+```markdown
 # Blog API — Proyecto M2
 
 API REST tipo JSONPlaceholder construida con Node.js, Express y PostgreSQL, que gestiona `authors`, `posts` y `comments` (extra credit). Incluye validaciones, manejo de errores centralizado, pruebas unitarias, documentación OpenAPI y despliegue en Railway.
@@ -29,17 +34,19 @@ route → controller → service → base de datos
 - **`middleware/`**: `asyncHandler` (envuelve los controllers async para propagar errores automáticamente) y `errorHandler` (manejador de errores centralizado).
 - **`utils/AppError.js`**: clase de error personalizada con `statusCode`, usada en toda la aplicación para errores esperados (validaciones, recursos no encontrados, etc.).
 
+### Estructura de carpetas
+
 ```
 src/
-├── config/                # pool.config.js, setup.sql, run-setup-sql.js
+├── config/                # pool.config.js, run-setup-sql.js, run-seed-sql.js
+├── db/                    # setup.sql, seed.sql
 ├── controllers/           # authors, posts, comments
 ├── routes/                # authors, posts, comments
 ├── services/              # authors, posts, comments
 ├── middleware/            # asyncHandler, errorHandler
 ├── utils/                 # AppError
 ├── tests/                 # api.test.js (vitest + supertest, services mockeados)
-├── docs/                  # 📁 documentación ahora dentro de src
-│   └── swagger.yaml       # OpenAPI
+├── docs/                  # swagger.yaml (OpenAPI)
 └── server.js              # configuración de Express (middlewares, routers)
 
 index.js                   # levanta el servidor (app.listen) — sigue fuera
@@ -91,9 +98,17 @@ Variables requeridas:
 npm run db:setup
 ```
 
-Esto ejecuta `src/config/setup.sql`, que crea las tablas `authors`, `posts` y `comments` con sus respectivas foreign keys (usa `CREATE TABLE IF NOT EXISTS`, es seguro correrlo varias veces).
+Este comando ejecuta el script `src/config/run-setup-sql.js`, que lee `src/db/setup.sql` y crea las tablas `authors`, `posts` y `comments` con sus respectivas claves foráneas. Usa `CREATE TABLE IF NOT EXISTS`, por lo que es seguro correrlo varias veces.
 
-### 4. Levantar el servidor en modo desarrollo
+### 4. (Opcional) Poblar la base con datos de ejemplo
+
+```bash
+npm run db:seed
+```
+
+Este comando ejecuta `src/config/run-seed-sql.js`, que inserta registros de ejemplo desde `src/db/seed.sql`. Es útil para pruebas rápidas. Los datos incluyen 3 autores, 5 posts y 7 comentarios.
+
+### 5. Levantar el servidor en modo desarrollo
 
 ```bash
 npm run dev
@@ -101,11 +116,21 @@ npm run dev
 
 El servidor queda disponible en `http://localhost:<PORT>` con recarga automática (`node --watch`).
 
-### 5. Levantar el servidor en modo producción
+### 6. Levantar el servidor en modo producción
 
 ```bash
 npm start
 ```
+
+## Scripts npm
+
+| Comando | Descripción |
+|---------|-------------|
+| `npm start` | Inicia el servidor en producción |
+| `npm run dev` | Inicia el servidor con `node --watch` (recarga automática) |
+| `npm run db:setup` | Crea las tablas en la base de datos desde `src/db/setup.sql` |
+| `npm run db:seed` | Inserta datos de ejemplo desde `src/db/seed.sql` |
+| `npm test` | Ejecuta los tests con Vitest |
 
 ## Documentación de la API (Swagger)
 
@@ -149,9 +174,9 @@ En producción: https://proyectom2hessammahamud-production.up.railway.app/api-do
 
 ## Validaciones
 
-- `authors`: `name` y `email` requeridos; `email` debe ser único.
-- `posts`: `title`, `content` y `author_id` requeridos; `author_id` debe corresponder a un author existente.
-- `comments`: `content`, `post_id` y `author_id` requeridos; `post_id` y `author_id` deben corresponder a registros existentes.
+- **authors**: `name` y `email` requeridos; `email` debe ser único.
+- **posts**: `title`, `content` y `author_id` requeridos; `author_id` debe corresponder a un author existente.
+- **comments**: `content`, `post_id` y `author_id` requeridos; `post_id` y `author_id` deben corresponder a registros existentes.
 
 Todas las respuestas de error en el handler siguen el formato `{ "error": "mensaje descriptivo" }`, con el status code correspondiente (`400`, `404`, `500`).
 
@@ -166,3 +191,36 @@ Las pruebas usan `vitest` y `supertest`, mockeando la capa de services (`vi.mock
 ## Despliegue
 
 El proyecto está desplegado en [Railway](https://railway.app), con un servicio para la aplicación Node.js y otro para PostgreSQL. Las variables de entorno de conexión a la base se configuran referenciando las variables del servicio de PostgreSQL de Railway.
+
+### Pasos resumidos para desplegar en Railway:
+
+1. Subí el código a GitHub (repositorio público).
+2. En Railway, creá un nuevo proyecto desde el repositorio.
+3. Agregá un servicio PostgreSQL (Railway provee las variables de entorno automáticamente).
+4. Configurá las variables de entorno que no están en el servicio de Postgres (ej. `PORT`).
+5. Conectate a la base de datos de Railway desde la consola (`railway connect`) o usando la interfaz web y ejecutá `npm run db:setup` para crear las tablas.
+6. La aplicación se desplegará automáticamente y recibirá una URL pública.
+
+> **Nota:** En Railway no se utiliza un archivo `.env` físico; las variables se definen en el panel de control. El código está preparado para cargar `.env` solo en desarrollo (`NODE_ENV !== 'production'`).
+
+## Uso de Inteligencia Artificial
+
+Durante el desarrollo se utilizó Claude (Anthropic) como asistente para:
+
+- Planificación de la arquitectura y diseño de la base de datos.
+- Revisión de código y corrección de errores (middlewares, validaciones, manejo de errores).
+- Generación de la documentación OpenAPI y este README.
+- Asistencia en el despliegue y configuración de Railway.
+
+Para más detalles, consultar el archivo [`USO_DE_IA.md`](USO_DE_IA.md) y la lista de prompts relevantes en [`PROMPTS_OUTPUTS.md`](PROMPTS_OUTPUTS.md).
+
+## Licencia
+
+ISC
+```
+
+---
+
+Este README está completo, actualizado con la nueva estructura, incluye el paso de seed, los scripts correctos y toda la información necesaria para que cualquier persona (o tu profesor) pueda clonar, configurar, ejecutar y probar tu proyecto sin problemas.  
+
+¿Listo para subirlo a GitHub? Recuerda también actualizar los archivos `run-setup-sql.js` y `run-seed-sql.js` con las rutas correctas a `../db/`. Cualquier otra cosa, aquí estoy.
