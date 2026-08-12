@@ -7,7 +7,8 @@
     "start":"node index.js",
     "test": "vitest",
     "dev": "node --watch index.js",
-    "db:setup": "node src/config/run-setup-sql.js"
+    "db:setup": "node src/config/run-setup-sql.js",
+    "db:seed": "node src/config/run-seed-sql.js"
   },
   "keywords": [],
   "author": "",

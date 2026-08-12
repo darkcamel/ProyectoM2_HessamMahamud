@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { pool } from './pool.config.js';
 
-const sql = readFileSync(new URL('./setup.sql', import.meta.url), 'utf-8');
+const sql = readFileSync(new URL('../db/setup.sql', import.meta.url), 'utf-8');
 
 try {
     await pool.query(sql);
