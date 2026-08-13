@@ -102,7 +102,7 @@ export async function removeAuthor(req, res, next) {
     try {
         const deleted = await deleteAuthor(req.params.id);
         if (!deleted) {
-            return res.status(404).json({ error: 'Author no encontrado' });
+            return next(new AppError('Author no encontrado', 404));
         }
         res.status(204).send();
 
