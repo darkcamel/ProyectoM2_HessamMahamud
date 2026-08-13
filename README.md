@@ -27,7 +27,7 @@ route → controller → service → base de datos
 - **`controllers/`**: valida el request, orquesta llamadas a uno o varios services, arma la respuesta HTTP (status code + body).
 - **`services/`**: única capa que ejecuta queries SQL. Un service solo conoce su propia tabla; nunca importa otro service.
 - **`middleware/`**: `asyncHandler` (envuelve los controllers async para propagar errores automáticamente) y `errorHandler` (manejador de errores centralizado).
-- **`utils/AppError.js`**: clase de error personalizada con `statusCode`, usada en toda la aplicación para errores esperados (validaciones, recursos no encontrados, etc.).
+- **`utils/AppError.js`**: clase de error personalizada con `statusCode`, usada en toda la aplicación para errores esperados (validaciones, recursos no encontrados, conflictos, etc.). El `errorHandler` la reconoce y devuelve el mensaje y código adecuado.
 
 ### Estructura de carpetas
 
@@ -67,7 +67,7 @@ npm install
 
 ### 2. Configurar variables de entorno
 
-Copiá `.env.example` a `.env` y completá los valores según tu instancia local de PostgreSQL:
+Copia el archivo `.env.example` a `.env` y completa los valores según tu instancia local de PostgreSQL:
 
 ```bash
 cp .env.example .env
@@ -167,13 +167,22 @@ En producción: https://proyectom2hessammahamud-production.up.railway.app/api-do
 | `GET` | `/posts/:postId/comments` | Listar los comments de un post |
 | `POST` | `/comments` | Crear un comment |
 
-## Validaciones
+## Validaciones y manejo de errores
 
-- **authors**: `name` y `email` requeridos; `email` debe ser único.
-- **posts**: `title`, `content` y `author_id` requeridos; `author_id` debe corresponder a un author existente.
-- **comments**: `content`, `post_id` y `author_id` requeridos; `post_id` y `author_id` deben corresponder a registros existentes.
+Las validaciones están repartidas en los controladores y el `errorHandler` centralizado. Se usa la clase `AppError` para representar errores operacionales (como campos faltantes, recursos no encontrados, email duplicado, etc.). El `errorHandler` captura:
 
-Todas las respuestas de error en el handler siguen el formato `{ "error": "mensaje descriptivo" }`, con el status code correspondiente (`400`, `404`, `500`).
+- Errores de `AppError` y devuelve el mensaje con el código HTTP correspondiente.
+- Errores de parseo de JSON (400).
+- Errores de PostgreSQL con códigos específicos (23505 para unicidad, 23503 para clave foránea) y los convierte en mensajes amigables.
+- Cualquier otro error inesperado responde con 500 y un mensaje genérico.
+
+**Validaciones concretas:**
+
+- **authors**: `name` y `email` son requeridos; `email` debe ser único.
+- **posts**: `title`, `content` y `author_id` son requeridos; `author_id` debe existir en `authors`.
+- **comments**: `content`, `post_id` y `author_id` son requeridos; ambos IDs deben existir.
+
+Todas las respuestas de error siguen el formato `{ "error": "mensaje descriptivo" }`, con el status code adecuado (`400`, `404`, `500`).
 
 ## Pruebas
 
@@ -181,7 +190,10 @@ Todas las respuestas de error en el handler siguen el formato `{ "error": "mensa
 npm test
 ```
 
-Las pruebas usan `vitest` y `supertest`, mockeando la capa de services (`vi.mock`) para no depender de una base de datos real. Cubren el flujo principal de `authors`, `posts` y `comments`, incluyendo operaciones de creación, lectura, actualización (PUT), eliminación y casos de error como recursos no encontrados, validaciones de campos obligatorios y conflictos de unicidad.
+Las pruebas usan `vitest` y `supertest`, y se mockean los servicios (`vi.mock`) para no depender de una base de datos real. Cubren el flujo principal de `authors`, `posts` y `comments`, incluyendo:
+
+- Creación, lectura, actualización (PUT) y eliminación.
+- Casos de error: recursos no encontrados, validaciones de campos obligatorios y conflictos de unicidad.
 
 ## Despliegue
 
@@ -189,11 +201,11 @@ El proyecto está desplegado en [Railway](https://railway.app), con un servicio 
 
 ### Pasos resumidos para desplegar en Railway:
 
-1. Subí el código a GitHub (repositorio público).
-2. En Railway, creá un nuevo proyecto desde el repositorio.
-3. Agregá un servicio PostgreSQL (Railway provee las variables de entorno automáticamente).
-4. Configurá las variables de entorno que no están en el servicio de Postgres (ej. `PORT`).
-5. Conectate a la base de datos de Railway desde la consola (`railway connect`) o usando la interfaz web y ejecutá `npm run db:setup` para crear las tablas.
+1. Sube el código a GitHub (repositorio público).
+2. En Railway, crea un nuevo proyecto desde el repositorio.
+3. Agrega un servicio PostgreSQL (Railway provee las variables de entorno automáticamente).
+4. Configura las variables de entorno que no están en el servicio de Postgres (ej. `PORT`).
+5. Conéctate a la base de datos de Railway desde la consola (`railway connect`) o usando la interfaz web y ejecuta `npm run db:setup` para crear las tablas.
 6. La aplicación se desplegará automáticamente y recibirá una URL pública.
 
 > **Nota:** En Railway no se utiliza un archivo `.env` físico; las variables se definen en el panel de control. El código está preparado para cargar `.env` solo en desarrollo (`NODE_ENV !== 'production'`).
@@ -207,8 +219,10 @@ Durante el desarrollo se utilizó Claude (Anthropic) como asistente para:
 - Generación de la documentación OpenAPI y este README.
 - Asistencia en el despliegue y configuración de Railway.
 
-Para más detalles, consultar el archivo [`USO_DE_IA.md`](USO_DE_IA.md) y la lista de prompts relevantes en [`PROMPTS_OUTPUTS.md`](PROMPTS_OUTPUTS.md).
+Para más detalles, consulta el archivo [`USO_DE_IA.md`](USO_DE_IA.md) y la lista de prompts relevantes en [`PROMPTS_OUTPUTS.md`](PROMPTS_OUTPUTS.md).
 
 ## Licencia
 
 ISC
+
+---
