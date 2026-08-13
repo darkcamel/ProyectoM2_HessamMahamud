@@ -5,6 +5,8 @@ API REST tipo JSONPlaceholder construida con Node.js, Express y PostgreSQL, que 
 - **Repositorio:** https://github.com/darkcamel/ProyectoM2_HessamMahamud
 - **Aplicación en producción (Railway):** https://proyectom2hessammahamud-production.up.railway.app/
 
+![Swagger API image](./src/docs/assets/Screenshot_2026-08-13_10-37-44.png)
+
 ## Tecnologías
 
 - **Node.js** (ES Modules) + **Express**
