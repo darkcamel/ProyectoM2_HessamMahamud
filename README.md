@@ -181,7 +181,7 @@ Todas las respuestas de error en el handler siguen el formato `{ "error": "mensa
 npm test
 ```
 
-Las pruebas usan `vitest` y `supertest`, mockeando la capa de services (`vi.mock`) para no depender de una base de datos real. Cubren el flujo principal y los casos de error más relevantes de `authors`, `posts` y `comments`.
+Las pruebas usan `vitest` y `supertest`, mockeando la capa de services (`vi.mock`) para no depender de una base de datos real. Cubren el flujo principal de `authors`, `posts` y `comments`, incluyendo operaciones de creación, lectura, actualización (PUT), eliminación y casos de error como recursos no encontrados, validaciones de campos obligatorios y conflictos de unicidad.
 
 ## Despliegue
 
@@ -212,5 +212,3 @@ Para más detalles, consultar el archivo [`USO_DE_IA.md`](USO_DE_IA.md) y la lis
 ## Licencia
 
 ISC
-
----
